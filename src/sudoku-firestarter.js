@@ -1,13 +1,20 @@
 exports.solveSudoku = function (sudokuNumbers) {
 
+    for (var i = 0; i < sudokuNumbers.length; i++) {
+        var row = sudokuNumbers[i];
 
-    return sudokuNumbers;
+        if(this.hasZeros(row) || !this.eachNumberExistsOnce(row)) {
+            return false;
+        }
+
+    }
+
+    return true;
 
 };
 
-
-exports.isRowValid = function (row) {
-    return row.indexOf(0) === -1;
+exports.hasZeros = function (row) {
+    return row.indexOf(0) !== -1;
 };
 
 exports.eachNumberExistsOnce = function(row) {

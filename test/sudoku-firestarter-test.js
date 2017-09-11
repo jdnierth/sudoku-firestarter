@@ -4,19 +4,24 @@ var expect = require('chai').expect,
 
 describe('SudokuFirestarter', function() {
   describe('#solveSudoku()', function() {
-    it('Sudoku result data to be an array', function() {
-      expect(sudokuFireStarter.solveSudoku(testData.superHard())).to.be.an('array');
+    it('Sudoku data to be invalid', function() {
+      expect(sudokuFireStarter.solveSudoku(testData.superHard())).to.be.false;
     });
+
+    it('Sudoku result data to be valid', function() {
+      expect(sudokuFireStarter.solveSudoku(testData.superHardSolved())).to.be.true;
+    });
+    
   });
 
-  describe('#isRowValid()', function() {
-    it('Returns true if row is valid', function() {
-      expect(sudokuFireStarter.isRowValid([1,2,3])).to.be.true;
+  describe('#hasZeros()', function() {
+    it('Returns false if row has no zeros', function() {
+      expect(sudokuFireStarter.hasZeros([1,2,3])).to.be.false;
 
     });
 
-    it('Returns false if row has a zero', function() {
-      expect(sudokuFireStarter.isRowValid([1,0,2])).to.be.false;
+    it('Returns true if row has zeros', function() {
+      expect(sudokuFireStarter.hasZeros([1,0,2])).to.be.true;
     });
 
     it('Each number exists once', function() {
