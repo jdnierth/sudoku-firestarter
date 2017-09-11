@@ -11,7 +11,6 @@ describe('SudokuFirestarter', function() {
 
   describe('#isRowValid()', function() {
     it('Returns true if row is valid', function() {
-
       expect(sudokuFireStarter.isRowValid([1,2,3])).to.be.true;
 
     });

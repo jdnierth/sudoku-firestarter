@@ -7,12 +7,5 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 
 exports.isRowValid = function (row) {
-
-    for (var i = 0, n = row.length; i < n; i++) {
-        if (row[i] === 0) {
-            return false;
-        }
-    }
-
-    return true;
+    return row.indexOf(0) === -1;
 };
