@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    sudokuFireStarter = require('../lib/sudoku-firestarter');
+    sudokuFireStarter = require('../src/sudoku-firestarter');
 
 describe('SudokuFirestarter', function() {
   describe('#solveSudoku()', function() {
