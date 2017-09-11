@@ -1,6 +1,8 @@
-exports.solveSudoku = function () {
+exports.solveSudoku = function (sudokuNumbers) {
 
-  return [1,2,3];
+  
+
+  return sudokuNumbers;
 
 };
 
