@@ -16,8 +16,8 @@ describe('SudokuFirestarter', function() {
 
     });
 
-    it('Returns false if row has duplicates', function() {
-      expect(sudokuFireStarter.isRowValid([1,1,2])).to.be.false;
+    it('Returns false if row has a zero', function() {
+      expect(sudokuFireStarter.isRowValid([1,0,2])).to.be.false;
     });
 
   })
