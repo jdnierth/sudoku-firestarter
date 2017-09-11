@@ -8,4 +8,17 @@ describe('SudokuFirestarter', function() {
       expect(sudokuFireStarter.solveSudoku(testData.superHard())).to.be.an('array');
     });
   });
+
+  describe('#isRowValid()', function() {
+    it('Returns true if row is valid', function() {
+
+      expect(sudokuFireStarter.isRowValid([1,2,3])).to.be.true;
+
+    });
+
+    it('Returns false if row has duplicates', function() {
+      expect(sudokuFireStarter.isRowValid([1,1,2])).to.be.false;
+    });
+
+  })
 });
