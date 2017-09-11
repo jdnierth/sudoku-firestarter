@@ -19,5 +19,17 @@ describe('SudokuFirestarter', function() {
       expect(sudokuFireStarter.isRowValid([1,0,2])).to.be.false;
     });
 
+    it('Each number exists once', function() {
+      expect(sudokuFireStarter.eachNumberExistsOnce([1,3,2])).to.be.true;
+    });
+
+    it('Detects duplicate values', function() {
+      expect(sudokuFireStarter.eachNumberExistsOnce([1,2,2])).to.be.false;
+    });
+
+    it('Detects zero and duplicates', function() {
+      expect(sudokuFireStarter.eachNumberExistsOnce([0,2,2])).to.be.false;
+    });
+
   })
 });
