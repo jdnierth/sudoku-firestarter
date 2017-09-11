@@ -1,0 +1,23 @@
+{
+  "author": "Jessica Nierth",
+  "name": "sudoku-firestarter",
+  "description": "Sudoku game based on NodeJS",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jdnierth/sudoku-firestarter.git",
+  "main": "./lib/sudoku-firestarter",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jdnierth/sudoku-firestarter.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">= 6.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^3.5.2"
+  }
+}
