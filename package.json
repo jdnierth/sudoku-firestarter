@@ -4,7 +4,7 @@
   "description": "Sudoku game based on NodeJS",
   "version": "0.0.1",
   "homepage": "https://github.com/jdnierth/sudoku-firestarter.git",
-  "main": "./lib/sudoku-firestarter",
+  "main": "./src/sudoku-firestarter",
   "repository": {
     "type": "git",
     "url": "git://github.com/jdnierth/sudoku-firestarter.git"
