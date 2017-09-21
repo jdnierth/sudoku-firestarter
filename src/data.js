@@ -1,3 +1,30 @@
+exports.easy = function () {
+    return {
+        input: [
+            [null, null, null, null, null, null, 1, 7, 9],
+            [8, null, 1, 7, null, null, 5, null, 4],
+            [9, 4, null, 1, null, null, 3, null, null],
+            [6, 2, null, null, null, null, null, 9, null],
+            [null, null, null, 2, null, 4, null, null, null],
+            [null, 5, null, null, null, null, null, 2, 6],
+            [null, null, 2, null, null, 1, null, 3, 8],
+            [4, null, 6, null, null, 3, 2, null, 7],
+            [1, 7, 3, null, null, null, null, null, null]
+        ],
+        output: [
+            [2, 6, 5, 3, 4, 8, 1, 7, 9],
+            [8, 3, 1, 7, 2, 9, 5, 6, 4],
+            [9, 4, 7, 1, 5, 6, 3, 8, 2],
+            [6, 2, 4, 8, 3, 5, 7, 9, 1],
+            [7, 1, 9, 2, 6, 4, 8, 5, 3],
+            [3, 5, 8, 9, 1, 7, 4, 2, 6],
+            [5, 9, 2, 4, 7, 1, 6, 3, 8],
+            [4, 8, 6, 5, 9, 3, 2, 1, 7],
+            [1, 7, 3, 6, 8, 2, 9, 4, 5]
+        ]
+    }
+};
+
 exports.superHard = function () {
     return [
         [0, 0, 0, 0, 0, 0, 0, 9, 0],
