@@ -1,5 +1,101 @@
+/**
+ * Fills in the blanks for a given unsolved Sudoku.
+ *
+ * @param sudokuNumbers
+ * @returns {boolean}
+ */
 exports.solveSudoku = function (sudokuNumbers) {
 
+    var quadrant;
+
+    // Go through sudoku row by row.
+    for (var rowIndex = 0; rowIndex < sudokuNumbers.length; rowIndex++) {
+
+        // Begin of a quadrant
+        if (rowIndex % 3 === 0) {
+            quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, rowIndex);
+        }
+
+        // Check existing numbers per row
+        this.getExistingNumbersInRow(sudokuNumbers, rowIndex);
+
+    }
+
+};
+
+/**
+ *
+ * @param { Array } sudokuNumbers is an array of nested arrays. Each array represents a row of a sudoku game.
+ * @param { Number } rowIndex is the number of the row to be investigated.
+ * @returns {Array} array of numbers which represent the existing numbers within a quadrant.
+ */
+exports.getExistingNumbersInQuadrant = function (sudokuNumbers, rowIndex) {
+    var quadrant = [];
+
+    for(var r = rowIndex; r <= 2; r++) {
+        quadrant.push(this.readQuadrantRow(sudokuNumbers, r));
+    }
+
+    return [].concat.apply([],quadrant);
+};
+
+
+/**
+ * Function that will only traverse through a row within a quadrant.
+ *
+ * @param { Array } sudokuNumbers representing the whole sudoku game. Each array represents a row.
+ * @param { Number } rowIndex the row within the sudokuNumbers that needs to be reviewed.
+ *
+ * @returns {Array} Array of numbers within one single row of a quadrant representing in a quadrant.
+ */
+exports.readQuadrantRow = function (sudokuNumbers, rowIndex) {
+    var max = 2,
+        quadrant = [];
+
+    for (var j = 0; j <= max; j++) {
+        if (this.isValidNumber(sudokuNumbers[rowIndex], sudokuNumbers[rowIndex][j])) {
+            quadrant.push(sudokuNumbers[rowIndex][j]);
+        }
+    }
+
+    return quadrant;
+};
+
+/**
+ * Takes a row of numbers and removes all invalid entries to keep
+ * existing, valid numbers.
+ *
+ * @param {Array} rowIndex number of the row to investigate.
+ * @returns {Array} empty array or array of valid, existing numbers.
+ */
+exports.getExistingNumbersInRow = function (sudokuNumbers, rowIndex) {
+
+    var row = sudokuNumbers[rowIndex],
+        nRow = [];
+
+    for (var i = 0, len = row.length; i < len; i++) {
+
+        if (this.isValidNumber(row, row[i])) {
+            nRow.push(row[i]);
+        }
+    }
+
+    return nRow;
+
+};
+
+exports.findMissingNumbersInQuadrant = function (sudokuNumbers) {
+
+};
+
+
+/**
+ * Checks whether or not the given result is valid.
+ *
+ * @param {Array} sudokuNumbers 2 dimensional array consisting of the numbers of rows.
+ * @returns {boolean}
+ */
+exports.checkResult = function (sudokuNumbers) {
     for (var i = 0; i < sudokuNumbers.length; i++) {
         var row = sudokuNumbers[i];
 
@@ -10,7 +106,6 @@ exports.solveSudoku = function (sudokuNumbers) {
     }
 
     return true;
-
 };
 
 /**
@@ -31,6 +126,11 @@ exports.hasNumber = function (row, number) {
  * @param {number} number to check for validity.
  */
 exports.isValidNumber = function (row, number) {
+
+    if (!number) {
+        console.error('Number ' + number + ' is invalid');
+        return false;
+    }
 
     return !(number <= 0 || number > row.length);
 };

@@ -5,19 +5,37 @@ var expect = require('chai').expect,
 describe('SudokuFirestarter', function () {
     describe('#solveSudoku()', function () {
         it('Sudoku data to be invalid', function () {
-            expect(sudokuFireStarter.solveSudoku(testData.superHard())).to.be.false;
+            expect(sudokuFireStarter.checkResult(testData.superHard())).to.be.false;
         });
 
         it('Sudoku result data to be valid', function () {
-            expect(sudokuFireStarter.solveSudoku(testData.superHardSolved())).to.be.true;
+            expect(sudokuFireStarter.checkResult(testData.superHardSolved())).to.be.true;
         });
 
         it('Detects zero and duplicates', function () {
             expect(sudokuFireStarter.eachNumberExistsOnce([0, 2, 2])).to.be.false;
         });
 
+        it('Solve Sudoku', function () {
+         //   sudokuFireStarter.solveSudoku(testData.easy().input);
+        });
+
     });
 
+    describe('#getExistingNumbersInRow()', function() {
+       it('Returns the number that exists in 2nd row', function() {
+           expect(sudokuFireStarter.getExistingNumbersInRow(testData.easy().input, 1)).to.deep.equal([8,1,7,5,4]);
+       })
+        
+    });
+    
+    describe('#getExistingNumbersInQuadrant()', function() {
+       it('Returns the number that exists in 1st quadrant', function() {
+           expect(sudokuFireStarter.getExistingNumbersInQuadrant(testData.easy().input, 0)).to.deep.equal([8,1,9,4]);
+       })
+        
+    });
+    
     describe('#hasNumber()', function () {
         it('Returns false if row has no zeros', function () {
             expect(sudokuFireStarter.hasNumber([1, 2, 3], 0)).to.be.false;
