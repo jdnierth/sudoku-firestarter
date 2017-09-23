@@ -23,6 +23,24 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 };
 
+exports.allPossibleValues = function(sudokuNumbers, row, column) {
+    var result = [];
+    var max = Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
+
+    if (sudokuNumbers[row][column] !== 0) {
+        return [];
+    }
+
+    var existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    for (var i = 1; i <= max; i++) {
+        if (existingNumbersInRow.indexOf(i) === -1) {
+            result.push(i)
+        }
+    }
+
+    return result;
+};
+
 /**
  *
  * @param { Array } sudokuNumbers is an array of nested arrays. Each array represents a row of a sudoku game.

@@ -22,6 +22,18 @@ describe('SudokuFirestarter', function () {
 
     });
 
+    describe('#allPossibleValues()', function () {
+        it('Returns empty array when solved', function () {
+            expect(sudokuFireStarter.allPossibleValues([ [1] ], 0, 0)).to.be.deep.equal([]);
+        });
+        it('Returns single value when only one value missing', function () {
+            expect(sudokuFireStarter.allPossibleValues([ [0,1,2] ], 0, 0)).to.be.deep.equal([3]);
+        });
+        it('Returns multiple values', function () {
+            expect(sudokuFireStarter.allPossibleValues([ [0,1,0,2,0] ], 0, 0)).to.be.deep.equal([3, 4, 5]);
+        });
+    });
+
     describe('#getExistingNumbersInRow()', function() {
        it('Returns the number that exists in 2nd row', function() {
            expect(sudokuFireStarter.getExistingNumbersInRow(testData.easy().input, 1)).to.deep.equal([8,1,7,5,4]);
