@@ -23,6 +23,24 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 };
 
+exports.allPossibleValues = function(sudokuNumbers, row, column) {
+    var result = [];
+    var max = Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
+
+    if (sudokuNumbers[row][column] !== 0) {
+        return [];
+    }
+
+    var existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    for (var i = 1; i <= max; i++) {
+        if (existingNumbersInRow.indexOf(i) === -1) {
+            result.push(i);
+        }
+    }
+
+    return result;
+};
+
 /**
  *
  * @param { Array } sudokuNumbers is an array of nested arrays. Each array represents a row of a sudoku game.
@@ -36,8 +54,6 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, rowIndex, column
     var quadrant = [],
         rowIndex = this.getFirstColumnOrRowOfQuadrant(rowIndex),
         max = this.getMaxRowOrColumn(rowIndex);
-
-    console.log('column: ', columnIndex, ' row: ', rowIndex, ' max: ', max, ' numbers: ', sudokuNumbers[rowIndex]);
 
     for (var r = rowIndex; r <= max; r++) {
         quadrant.push(this.readQuadrant(sudokuNumbers, r, columnIndex, max));
@@ -58,19 +74,16 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, rowIndex, column
  */
 exports.getMaxRowOrColumn = function(index, length) {
     var i = index + 2;
-    console.log('i: ', i);
 
     for(var j = length; j > 0; j--) {
 
         if(i % 3 === 0) {
-            console.log('1A: ', i);
             return i;
         } else {
             i = i--;
         }
     }
 
-    console.log('2B: ', i);
     return i;
 };
 
@@ -92,10 +105,8 @@ exports.readQuadrant = function (sudokuNumbers, rowIndex, columnIndex) {
     columnIndex = this.getFirstColumnOrRowOfQuadrant(columnIndex);
     max = this.getMaxRowOrColumn(columnIndex);
 
-    console.log('2 column: ', columnIndex, ' row: ', rowIndex, ' max: ', max, ' numbers: ', sudokuNumbers[rowIndex]);
-
     for (var c = columnIndex; c <= max; c++) {
-        console.log(sudokuNumbers[rowIndex][c]);
+
         if (this.isValidNumber(sudokuNumbers[rowIndex], sudokuNumbers[rowIndex][c])) {
             quadrant.push(sudokuNumbers[rowIndex][c]);
         }
