@@ -37,7 +37,7 @@ exports.allPossibleValues = function(sudokuNumbers, row, column) {
         return [];
     }
 
-    var existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    var existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, row);
     for (var i = 1; i <= max; i++) {
         if (existingNumbersInRow.indexOf(i) === -1) {
             result.push(i)
