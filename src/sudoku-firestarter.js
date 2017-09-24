@@ -23,6 +23,12 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 };
 
+/**
+ * @param sudokuNumbers the current sudoku
+ * @param row the row of the selected cell
+ * @param column the column of the selected cell
+ * @returns {Array} a list of all possible values for the selected cell
+ */
 exports.allPossibleValues = function(sudokuNumbers, row, column) {
     var result = [];
     var max = Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
