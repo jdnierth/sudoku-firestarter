@@ -6,18 +6,18 @@
  */
 exports.solveSudoku = function (sudokuNumbers) {
 
-    var quadrant;
+    var quadrant,
+        length = sudokuNumbers.length;
 
     // Go through sudoku row by row.
-    for (var rowIndex = 0; rowIndex < sudokuNumbers.length; rowIndex++) {
+    for (var r = 0; r < length; r++) {
 
-        // Begin of a quadrant
-        if (rowIndex % 3 === 0) {
-            quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, rowIndex);
+        for (var c = 0; c <= length; c++) {
+            quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, r, c);
         }
 
         // Check existing numbers per row
-        this.getExistingNumbersInRow(sudokuNumbers, rowIndex);
+      //  this.getExistingNumbersInRow(sudokuNumbers, r);
 
     }
 
@@ -44,35 +44,71 @@ exports.allPossibleValues = function(sudokuNumbers, row, column) {
 /**
  *
  * @param { Array } sudokuNumbers is an array of nested arrays. Each array represents a row of a sudoku game.
- * @param { Number } rowIndex is the number of the row to be investigated.
+ * @param { Number } row is the number of the row to be investigated.
+ * @param { Number } column is the number of the column to be investigated.
+ *
  * @returns {Array} array of numbers which represent the existing numbers within a quadrant.
  */
-exports.getExistingNumbersInQuadrant = function (sudokuNumbers, rowIndex) {
-    var quadrant = [];
+exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
 
-    for(var r = rowIndex; r <= 2; r++) {
-        quadrant.push(this.readQuadrantRow(sudokuNumbers, r));
+    var quadrant = [],
+        row = this.getFirstColumnOrRowOfQuadrant(row),
+        max = this.getMaxRowOrColumn(row);
+
+    for (var r = row; r <= max; r++) {
+        quadrant.push(this.readQuadrant(sudokuNumbers, r, column, max));
     }
 
-    return [].concat.apply([],quadrant);
+    // Flatten result of nested arrays to a single array
+    return [].concat.apply([], quadrant);
 };
 
+/**
+ * Returns a max index.
+ * TODO: Make this more flexible not fixed on to a sudoku with 3x3 quadrants.
+ *
+ * @param {Number} index which will make sure that no more than 3 items will be looped through.
+ * @param {Number} length max length of possible indexes.
+ *
+ * @returns {Number} will always return 2.
+ */
+exports.getMaxRowOrColumn = function(index, length) {
+    var i = index + 2;
+
+    for(var j = length; j > 0; j--) {
+
+        if(i % 3 === 0) {
+            return i;
+        } else {
+            i = i--;
+        }
+    }
+
+    return i;
+};
 
 /**
  * Function that will only traverse through a row within a quadrant.
  *
  * @param { Array } sudokuNumbers representing the whole sudoku game. Each array represents a row.
- * @param { Number } rowIndex the row within the sudokuNumbers that needs to be reviewed.
+ * @param { Number } row the row within the sudokuNumbers that needs to be reviewed.
+ * @param { Number } column the column within the sudokuNumbers that needs to be reviewed.
  *
  * @returns {Array} Array of numbers within one single row of a quadrant representing in a quadrant.
  */
-exports.readQuadrantRow = function (sudokuNumbers, rowIndex) {
-    var max = 2,
+exports.readQuadrant = function (sudokuNumbers, row, column) {
+
+    var max,
         quadrant = [];
 
-    for (var j = 0; j <= max; j++) {
-        if (this.isValidNumber(sudokuNumbers[rowIndex], sudokuNumbers[rowIndex][j])) {
-            quadrant.push(sudokuNumbers[rowIndex][j]);
+    // Start at the first cell of the quadrant.
+    column = this.getFirstColumnOrRowOfQuadrant(column);
+    max = this.getMaxRowOrColumn(column);
+
+    for (var c = column; c <= max; c++) {
+
+        if (this.isValidNumber(sudokuNumbers[row], sudokuNumbers[row][c])) {
+            quadrant.push(sudokuNumbers[row][c]);
         }
     }
 
@@ -80,19 +116,39 @@ exports.readQuadrantRow = function (sudokuNumbers, rowIndex) {
 };
 
 /**
+ * Retrieves the index of the column or row where the quadrant starts.
+ *
+ * @param {Number} index of column of row.
+ * @returns {*}
+ */
+exports.getFirstColumnOrRowOfQuadrant = function (index) {
+    var diff = index;
+
+    if (index % 3 === 1) {
+
+        diff = index - 1;
+
+    } else if (index % 3 === 2) {
+
+        diff = index - 2;
+    }
+
+    return diff;
+};
+
+/**
  * Takes a row of numbers and removes all invalid entries to keep
  * existing, valid numbers.
  *
- * @param {Array} rowIndex number of the row to investigate.
+ * @param {Array} row number of the row to investigate.
  * @returns {Array} empty array or array of valid, existing numbers.
  */
-exports.getExistingNumbersInRow = function (sudokuNumbers, rowIndex) {
+exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
 
-    var row = sudokuNumbers[rowIndex],
+    var row = sudokuNumbers[row],
         nRow = [];
 
     for (var i = 0, len = row.length; i < len; i++) {
-
         if (this.isValidNumber(row, row[i])) {
             nRow.push(row[i]);
         }

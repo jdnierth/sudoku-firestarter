@@ -1,15 +1,15 @@
 exports.easy = function () {
     return {
         input: [
-            [null, null, null, null, null, null, 1, 7, 9],
-            [8, null, 1, 7, null, null, 5, null, 4],
-            [9, 4, null, 1, null, null, 3, null, null],
-            [6, 2, null, null, null, null, null, 9, null],
-            [null, null, null, 2, null, 4, null, null, null],
-            [null, 5, null, null, null, null, null, 2, 6],
-            [null, null, 2, null, null, 1, null, 3, 8],
-            [4, null, 6, null, null, 3, 2, null, 7],
-            [1, 7, 3, null, null, null, null, null, null]
+            [0, 0, 0, 0, 0, 0, 1, 7, 9],
+            [8, 0, 1, 7, 0, 0, 5, 0, 4],
+            [9, 4, 0, 1, 0, 0, 3, 0, 0],
+            [6, 2, 0, 0, 0, 0, 0, 9, 0],
+            [0, 0, 0, 2, 0, 4, 0, 0, 0],
+            [0, 5, 0, 0, 0, 0, 0, 2, 6],
+            [0, 0, 2, 0, 0, 1, 0, 3, 8],
+            [4, 0, 6, 0, 0, 3, 2, 0, 7],
+            [1, 7, 3, 0, 0, 0, 0, 0, 0]
         ],
         output: [
             [2, 6, 5, 3, 4, 8, 1, 7, 9],
