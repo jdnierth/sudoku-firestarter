@@ -53,7 +53,7 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
 
     var quadrant = [],
         row = this.getFirstColumnOrRowOfQuadrant(row),
-        max = this.getMaxRowOrColumn(row);
+        max = row + 2;
 
     for (var r = row; r <= max; r++) {
         quadrant.push(this.readQuadrant(sudokuNumbers, r, column, max));
@@ -61,30 +61,6 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
 
     // Flatten result of nested arrays to a single array
     return [].concat.apply([], quadrant);
-};
-
-/**
- * Returns a max index.
- * TODO: Make this more flexible not fixed on to a sudoku with 3x3 quadrants.
- *
- * @param {Number} index which will make sure that no more than 3 items will be looped through.
- * @param {Number} length max length of possible indexes.
- *
- * @returns {Number} will always return 2.
- */
-exports.getMaxRowOrColumn = function(index, length) {
-    var i = index + 2;
-
-    for(var j = length; j > 0; j--) {
-
-        if(i % 3 === 0) {
-            return i;
-        } else {
-            i = i--;
-        }
-    }
-
-    return i;
 };
 
 /**
@@ -103,7 +79,7 @@ exports.readQuadrant = function (sudokuNumbers, row, column) {
 
     // Start at the first cell of the quadrant.
     column = this.getFirstColumnOrRowOfQuadrant(column);
-    max = this.getMaxRowOrColumn(column);
+    max = column + 2;
 
     for (var c = column; c <= max; c++) {
 
@@ -118,7 +94,7 @@ exports.readQuadrant = function (sudokuNumbers, row, column) {
 /**
  * Retrieves the index of the column or row where the quadrant starts.
  *
- * @param {Number} index of column of row.
+ * @param {Number} index of row or column.
  * @returns {*}
  */
 exports.getFirstColumnOrRowOfQuadrant = function (index) {
