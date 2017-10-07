@@ -17,23 +17,64 @@ exports.solveSudoku = function (sudokuNumbers) {
         }
 
         // Check existing numbers per row
-      //  this.getExistingNumbersInRow(sudokuNumbers, r);
+        //  this.getExistingNumbersInRow(sudokuNumbers, r);
 
     }
 
 };
 
-exports.allPossibleValues = function(sudokuNumbers, row, column) {
-    var result = [];
-    var max = Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
+exports.allPossibleValues = function (sudokuNumbers, row, column) {
+  
+    var c,
+        existingNumbersInRow,
+        existingNumbersInColumn,
+        r,
+        result,
+        max = this.getAmountOfNumbers(sudokuNumbers);
 
     if (sudokuNumbers[row][column] !== 0) {
         return [];
     }
 
-    var existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    r = this.possibleValues(existingNumbersInRow, max);
+
+    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, 0, 0);
+    c = this.possibleValues(existingNumbersInColumn, max);
+
+    // Only numbers that are possible within the row and column
+    result = this.intersect(r, c);
+
+    return result;
+};
+
+exports.flattenArray = function (a) {
+    return [].concat.apply([], a);
+};
+
+exports.intersect = function (a, b) {
+    var matches = [];
+
+    for (var i = 0; i < a.length; i++) {
+        for (var e = 0; e < b.length; e++) {
+            if (a[i] === b[e]) matches.push(a[i]);
+        }
+    }
+    return matches;
+};
+
+exports.unique = function (a) {
+    return a.filter(function (item, pos) {
+        return a.indexOf(item) == pos;
+    })
+};
+
+exports.possibleValues = function (rowOrColumn, max) {
+
+    var result = [];
+
     for (var i = 1; i <= max; i++) {
-        if (existingNumbersInRow.indexOf(i) === -1) {
+        if (rowOrColumn.indexOf(i) === -1) {
             result.push(i);
         }
     }
@@ -60,7 +101,7 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
     }
 
     // Flatten result of nested arrays to a single array
-    return [].concat.apply([], quadrant);
+    return this.flattenArray(quadrant);
 };
 
 /**
@@ -134,10 +175,21 @@ exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
 
 };
 
-exports.findMissingNumbersInQuadrant = function (sudokuNumbers) {
+exports.getExistingNumbersInColumn = function (sudokuNumbers, x) {
 
+    var column = [],
+        max = this.getAmountOfNumbers(sudokuNumbers);
+
+    if (!sudokuNumbers[0][0]) {
+        return [];
+    }
+
+    for (var r = 0; r <= max; r++) {
+        column.push(sudokuNumbers[r][x]);
+    }
+
+    return column;
 };
-
 
 /**
  * Checks whether or not the given result is valid.
@@ -156,6 +208,16 @@ exports.checkResult = function (sudokuNumbers) {
     }
 
     return true;
+};
+
+/**
+ * Gets the max amount of numbers within the sudoku.
+ *
+ * @param { Array } sudokuNumbers
+ * @returns { number }
+ */
+exports.getAmountOfNumbers = function (sudokuNumbers) {
+    return Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
 };
 
 /**
