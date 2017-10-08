@@ -28,10 +28,10 @@ describe('SudokuFirestarter', function () {
             expect(sudokuFireStarter.allPossibleValues([[1]], 0, 0)).to.be.deep.equal([]);
         });
         it('Returns single value when only one value missing', function () {
-            expect(sudokuFireStarter.allPossibleValues([[0, 1, 2]], 0, 0)).to.be.deep.equal([3]);
+            expect(sudokuFireStarter.allPossibleValues([[0, 1, 2], [4, 5, 6], [7, 8, 9]], 0, 0)).to.be.deep.equal([3]);
         });
         it('Returns multiple values', function () {
-            expect(sudokuFireStarter.allPossibleValues([[0, 1, 0, 2, 0]], 0, 0)).to.be.deep.equal([3, 4, 5]);
+            expect(sudokuFireStarter.allPossibleValues(testData.easy().input, 1, 1)).to.be.deep.equal([3, 6, 9]);
         });
     });
 

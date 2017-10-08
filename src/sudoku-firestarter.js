@@ -25,8 +25,14 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 };
 
-exports.allPossibleValues = function (sudokuNumbers, row, column) {
-  
+/**
+ * @param sudokuNumbers the current sudoku
+ * @param rowIndex the row index of the selected cell
+ * @param columnIndex the column index of the selected cell
+ * @returns {Array} a list of all possible values for the selected cell
+ */
+exports.allPossibleValues = function (sudokuNumbers, rowIndex, columnIndex) {
+
     var c,
         existingNumbersInRow,
         existingNumbersInColumn,
@@ -34,14 +40,14 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
         result,
         max = this.getAmountOfNumbers(sudokuNumbers);
 
-    if (sudokuNumbers[row][column] !== 0) {
+    if (sudokuNumbers[rowIndex][columnIndex] !== 0) {
         return [];
     }
 
-    existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, 0);
+    existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, rowIndex);
     r = this.possibleValues(existingNumbersInRow, max);
 
-    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, 0, 0);
+    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, columnIndex);
     c = this.possibleValues(existingNumbersInColumn, max);
 
     // Only numbers that are possible within the row and column
@@ -53,7 +59,6 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
 exports.possibleValues = function (rowOrColumn, max) {
 
     var result = [];
-
     for (var i = 1; i <= max; i++) {
         if (rowOrColumn.indexOf(i) === -1) {
             result.push(i);
@@ -156,20 +161,18 @@ exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
 
 };
 
-exports.getExistingNumbersInColumn = function (sudokuNumbers, x) {
+exports.getExistingNumbersInColumn = function (sudokuNumbers, column) {
 
-    var column = [],
+    var result = [],
         max = this.getAmountOfNumbers(sudokuNumbers);
 
-    if (!sudokuNumbers[0][0]) {
-        return [];
+    for (var r = 0; r < max; r++) {
+        if (utilities.isValidNumber(sudokuNumbers[r], sudokuNumbers[r][column])) {
+            result.push(sudokuNumbers[r][column]);
+        }
     }
 
-    for (var r = 0; r <= max; r++) {
-        column.push(sudokuNumbers[r][x]);
-    }
-
-    return column;
+    return result;
 };
 
 /**
