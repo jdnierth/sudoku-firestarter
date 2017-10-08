@@ -47,7 +47,7 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
     existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, row);
     r = this.possibleValues(existingNumbersInRow, max);
 
-    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, 0, 0);
+    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, column);
     c = this.possibleValues(existingNumbersInColumn, max);
 
     // Only numbers that are possible within the row and column
@@ -161,20 +161,18 @@ exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
 
 };
 
-exports.getExistingNumbersInColumn = function (sudokuNumbers, x) {
+exports.getExistingNumbersInColumn = function (sudokuNumbers, column) {
 
-    var column = [],
+    var result = [],
         max = this.getAmountOfNumbers(sudokuNumbers);
 
-    if (!sudokuNumbers[0][0]) {
-        return [];
+    for (var r = 0; r < max; r++) {
+        if (utilities.isValidNumber(sudokuNumbers[r], sudokuNumbers[r][column])) {
+            result.push(sudokuNumbers[r][column]);
+        }
     }
 
-    for (var r = 0; r <= max; r++) {
-        column.push(sudokuNumbers[r][x]);
-    }
-
-    return column;
+    return result;
 };
 
 /**
