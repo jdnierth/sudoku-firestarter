@@ -1,4 +1,4 @@
-var helpers = require('./sudoku-helpers');
+var helpers = require('./sudoku-utilities');
 
 /**
  * Fills in the blanks for a given unsolved Sudoku.

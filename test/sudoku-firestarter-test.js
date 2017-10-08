@@ -1,6 +1,6 @@
 var expect = require('chai').expect,
     sudokuFireStarter = require('../src/sudoku-firestarter'),
-    helpers = require('../src/sudoku-helpers'),
+    helpers = require('../src/sudoku-utilities'),
     testData = require('../src/data');
 
 describe('SudokuFirestarter', function () {
