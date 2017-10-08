@@ -27,11 +27,11 @@ exports.solveSudoku = function (sudokuNumbers) {
 
 /**
  * @param sudokuNumbers the current sudoku
- * @param row the row of the selected cell
- * @param column the column of the selected cell
+ * @param rowIndex the row index of the selected cell
+ * @param columnIndex the column index of the selected cell
  * @returns {Array} a list of all possible values for the selected cell
  */
-exports.allPossibleValues = function (sudokuNumbers, row, column) {
+exports.allPossibleValues = function (sudokuNumbers, rowIndex, columnIndex) {
 
     var c,
         existingNumbersInRow,
@@ -40,14 +40,14 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
         result,
         max = this.getAmountOfNumbers(sudokuNumbers);
 
-    if (sudokuNumbers[row][column] !== 0) {
+    if (sudokuNumbers[rowIndex][columnIndex] !== 0) {
         return [];
     }
 
-    existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, row);
+    existingNumbersInRow = this.getExistingNumbersInRow(sudokuNumbers, rowIndex);
     r = this.possibleValues(existingNumbersInRow, max);
 
-    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, column);
+    existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, columnIndex);
     c = this.possibleValues(existingNumbersInColumn, max);
 
     // Only numbers that are possible within the row and column
