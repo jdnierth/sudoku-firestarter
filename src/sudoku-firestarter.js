@@ -1,3 +1,5 @@
+var helpers = require('./sudoku-helpers');
+
 /**
  * Fills in the blanks for a given unsolved Sudoku.
  *
@@ -43,30 +45,9 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
     c = this.possibleValues(existingNumbersInColumn, max);
 
     // Only numbers that are possible within the row and column
-    result = this.intersect(r, c);
+    result = helpers.intersect(r, c);
 
     return result;
-};
-
-exports.flattenArray = function (a) {
-    return [].concat.apply([], a);
-};
-
-exports.intersect = function (a, b) {
-    var matches = [];
-
-    for (var i = 0; i < a.length; i++) {
-        for (var e = 0; e < b.length; e++) {
-            if (a[i] === b[e]) matches.push(a[i]);
-        }
-    }
-    return matches;
-};
-
-exports.unique = function (a) {
-    return a.filter(function (item, pos) {
-        return a.indexOf(item) == pos;
-    })
 };
 
 exports.possibleValues = function (rowOrColumn, max) {
@@ -101,7 +82,7 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
     }
 
     // Flatten result of nested arrays to a single array
-    return this.flattenArray(quadrant);
+    return helpers.flattenArray(quadrant);
 };
 
 /**
@@ -124,7 +105,7 @@ exports.readQuadrant = function (sudokuNumbers, row, column) {
 
     for (var c = column; c <= max; c++) {
 
-        if (this.isValidNumber(sudokuNumbers[row], sudokuNumbers[row][c])) {
+        if (helpers.isValidNumber(sudokuNumbers[row], sudokuNumbers[row][c])) {
             quadrant.push(sudokuNumbers[row][c]);
         }
     }
@@ -166,7 +147,7 @@ exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
         nRow = [];
 
     for (var i = 0, len = row.length; i < len; i++) {
-        if (this.isValidNumber(row, row[i])) {
+        if (helpers.isValidNumber(row, row[i])) {
             nRow.push(row[i]);
         }
     }
@@ -201,7 +182,7 @@ exports.checkResult = function (sudokuNumbers) {
     for (var i = 0; i < sudokuNumbers.length; i++) {
         var row = sudokuNumbers[i];
 
-        if (!this.isValidNumber(row, i + 1) || !this.eachNumberExistsOnce(row)) {
+        if (!helpers.isValidNumber(row, i + 1) || !this.eachNumberExistsOnce(row)) {
             return false;
         }
 
@@ -218,33 +199,6 @@ exports.checkResult = function (sudokuNumbers) {
  */
 exports.getAmountOfNumbers = function (sudokuNumbers) {
     return Math.max(sudokuNumbers.length, sudokuNumbers[0].length);
-};
-
-/**
- * Checks if a given row contains a zero.
- *
- * @param {Array} row consisting of numbers or an empty array.
- * @param {Number} number to search for within the row.
- * @returns {boolean} returns true if zero has been found in the given array else false.
- */
-exports.hasNumber = function (row, number) {
-    return row.indexOf(number) !== -1;
-};
-
-/**
- * Returns true if the given number is a valid Sudoku number
- *
- * @param {Array} row of numbers.
- * @param {number} number to check for validity.
- */
-exports.isValidNumber = function (row, number) {
-
-    if (!number) {
-        console.error('Number ' + number + ' is invalid');
-        return false;
-    }
-
-    return !(number <= 0 || number > row.length);
 };
 
 /**
