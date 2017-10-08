@@ -1,4 +1,4 @@
-var helpers = require('./sudoku-utilities');
+var utilities = require('./sudoku-utilities');
 
 /**
  * Fills in the blanks for a given unsolved Sudoku.
@@ -45,7 +45,7 @@ exports.allPossibleValues = function (sudokuNumbers, row, column) {
     c = this.possibleValues(existingNumbersInColumn, max);
 
     // Only numbers that are possible within the row and column
-    result = helpers.intersect(r, c);
+    result = utilities.intersect(r, c);
 
     return result;
 };
@@ -82,7 +82,7 @@ exports.getExistingNumbersInQuadrant = function (sudokuNumbers, row, column) {
     }
 
     // Flatten result of nested arrays to a single array
-    return helpers.flattenArray(quadrant);
+    return utilities.flattenArray(quadrant);
 };
 
 /**
@@ -105,7 +105,7 @@ exports.readQuadrant = function (sudokuNumbers, row, column) {
 
     for (var c = column; c <= max; c++) {
 
-        if (helpers.isValidNumber(sudokuNumbers[row], sudokuNumbers[row][c])) {
+        if (utilities.isValidNumber(sudokuNumbers[row], sudokuNumbers[row][c])) {
             quadrant.push(sudokuNumbers[row][c]);
         }
     }
@@ -147,7 +147,7 @@ exports.getExistingNumbersInRow = function (sudokuNumbers, row) {
         nRow = [];
 
     for (var i = 0, len = row.length; i < len; i++) {
-        if (helpers.isValidNumber(row, row[i])) {
+        if (utilities.isValidNumber(row, row[i])) {
             nRow.push(row[i]);
         }
     }
@@ -182,7 +182,7 @@ exports.checkResult = function (sudokuNumbers) {
     for (var i = 0; i < sudokuNumbers.length; i++) {
         var row = sudokuNumbers[i];
 
-        if (!helpers.isValidNumber(row, i + 1) || !this.eachNumberExistsOnce(row)) {
+        if (!utilities.isValidNumber(row, i + 1) || !this.eachNumberExistsOnce(row)) {
             return false;
         }
 

@@ -1,6 +1,6 @@
 var expect = require('chai').expect,
     sudokuFireStarter = require('../src/sudoku-firestarter'),
-    helpers = require('../src/sudoku-utilities'),
+    utilities = require('../src/sudoku-utilities'),
     testData = require('../src/data');
 
 describe('SudokuFirestarter', function () {
@@ -69,12 +69,12 @@ describe('SudokuFirestarter', function () {
 
     describe('#hasNumber()', function () {
         it('Returns false if row has no zeros', function () {
-            expect(helpers.hasNumber([1, 2, 3], 0)).to.be.false;
+            expect(utilities.hasNumber([1, 2, 3], 0)).to.be.false;
 
         });
 
         it('Returns true if row has zeros', function () {
-            expect(helpers.hasNumber([1, 0, 2], 0)).to.be.true;
+            expect(utilities.hasNumber([1, 0, 2], 0)).to.be.true;
         });
     });
 
