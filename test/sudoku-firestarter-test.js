@@ -18,7 +18,7 @@ describe('SudokuFirestarter', function () {
         });
 
         it('Solve Sudoku', function () {
-            //   sudokuFireStarter.solveSudoku(testData.easy().input);
+              expect(sudokuFireStarter.solveSudoku(testData.easy().input)).to.be.deep.equal(testData.easy().output);
         });
 
     });
@@ -41,7 +41,7 @@ describe('SudokuFirestarter', function () {
 
     describe('#getNextBestSolution()', function() {
         it('Returns the value to be filled in next', function() {
-           expect(sudokuFireStarter.getNextSolution(testData.easy().input)).to.be.deep.equal([
+           expect(sudokuFireStarter.getNextSolution(testData.easy().input,0,0).sudoku).to.be.deep.equal([
                [0, 0, 5, 0, 0, 0, 1, 7, 9],
                [8, 0, 1, 7, 0, 0, 5, 0, 4],
                [9, 4, 0, 1, 0, 0, 3, 0, 0],

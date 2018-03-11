@@ -8,46 +8,110 @@ var utilities = require('./sudoku-utilities'),
  * @returns {boolean}
  */
 exports.solveSudoku = function (sudokuNumbers) {
+    var maxTries = 0,
+        maxTriesLimit = 10,
+        solution,
+        restart = false,
+        max = this.getAmountOfNumbers(sudokuNumbers);
 
-    var quadrant,
-        length = sudokuNumbers.length;
+    for (var i = 0; i < max; i++) {
 
-    // Go through sudoku row by row.
-    for (var r = 0; r < length; r++) {
-
-        for (var c = 0; c <= length; c++) {
-            quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, r, c);
+        // If the last solutions indexes haven't reached number of possible values
+        if (solution && (solution.r === max && solution.c === max)) {
+            return solution;
         }
 
+        if (i === 0 && !restart) {
+            solution = this.getNextSolution(sudokuNumbers, 0, 0);
+        } else if( i !== 0 && restart) {
+            solution = this.getNextSolution(solution.sudoku, solution.r, solution.c);
+        }
+
+        // Loop through the sudoku again if there are still zeros left
+        if(i === max - 1 && maxTries < maxTriesLimit) {
+            var zeros = this.checkSudokuForZeros(solution.sudoku, 0, 0);
+            if(zeros.length !== 0) {
+               i = 0;
+               restart = true;
+               solution.r = zeros.r;
+               solution.c = zeros.c;
+               maxTries++;
+            } else {
+                return solution.sudoku;
+            }
+        }
     }
 
+    return solution.sudoku;
+};
+
+/**
+ * Loops through the Sudoku and returns false if no zeros can be found, else true.
+ *
+ * @param {array} sudokuNumbers
+ * @param {number} r row index if set to null, loop will start from 0.
+ * @param {number} c column index if set to null, loop will start from 0
+ */
+exports.checkSudokuForZeros = function (sudokuNumbers, r, c) {
+    var max = this.getAmountOfNumbers(sudokuNumbers);
+
+    r = (r == null) ? 0 : r;
+    c = (c == null) ? 0 : c;
+
+    // Go through sudoku row by row.
+    for (var rlen = sudokuNumbers.length; r < rlen; r++) {
+        c = 0;
+
+        for (var clen = sudokuNumbers.length; c < clen; c++) {
+            if (sudokuNumbers[r][c] === 0) {
+                return {
+                    r: r,
+                    c: c
+                }
+            }
+        }
+    }
+
+    return [];
 };
 
 /**
  * Given an unsolved sudoku, this function returns the next solution of an empty cell.
  *
  * @param {array} sudokuNumbers
+ * @param {number} r row index from where to continue searching
+ * @param {number} c column index from where to continue searching
  */
-exports.getNextSolution = function (sudokuNumbers) {
+exports.getNextSolution = function (sudokuNumbers, r, c) {
     var possibleValues,
-        newSudoku;
+        solution = {
+            r: r,
+            c: c,
+            sudoku: sudokuNumbers
+        };
 
-    // Go through sudoku row by row.
-    for (var r = 0, rlen = sudokuNumbers.length; r < rlen; r++) {
-        for (var c = 0, clen = sudokuNumbers.length; c < clen; c++) {
+    // // Go through sudoku row by row.
+    for (var rlen = sudokuNumbers.length; r < rlen; r++) {
+        c = 0;
+        for (var clen = sudokuNumbers.length; c < clen; c++) {
+
             if (sudokuNumbers[r][c] === 0) {
                 possibleValues = this.possibleValuesForCell(sudokuNumbers, r, c);
-
                 if (possibleValues.length === 1) {
-                    newSudoku = sudokuNumbers;
-                    // update new value
-                    newSudoku[r][c] = possibleValues[0];
+                    solution.sudoku = sudokuNumbers;
 
-                    return newSudoku;
+                    // update new values
+                    solution.r = r;
+                    solution.c = c;
+                    solution.sudoku[r][c] = possibleValues[0];
+
+                    return solution;
                 }
             }
         }
     }
+
+    return solution;
 };
 
 /**
@@ -82,7 +146,7 @@ exports.possibleValuesForCell = function (sudokuNumbers, rowIndex, columnIndex) 
     existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, columnIndex);
     c = this.possibleValues(existingNumbersInColumn, max);
 
-    existingNumbersInQuadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, 1, 1);
+    existingNumbersInQuadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, rowIndex, columnIndex);
     q = this.possibleValues(existingNumbersInQuadrant, max);
 
     // Only numbers that are possible within the row and column
