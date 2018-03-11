@@ -1,4 +1,5 @@
-var utilities = require('./sudoku-utilities');
+var utilities = require('./sudoku-utilities'),
+    solvedSudoku;
 
 /**
  * Fills in the blanks for a given unsolved Sudoku.
@@ -18,24 +19,28 @@ exports.solveSudoku = function (sudokuNumbers) {
             quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, r, c);
         }
 
-        // Check existing numbers per row
-        //  this.getExistingNumbersInRow(sudokuNumbers, r);
-
     }
 
 };
 
 /**
- * @param sudokuNumbers the current sudoku
- * @param rowIndex the row index of the selected cell
- * @param columnIndex the column index of the selected cell
- * @returns {Array} a list of all possible values for the selected cell
+ * Returns a list of values that will be possible to put into 1 requested cell.
+ * It needs to check the available numbers in the row, in the column and the quadrant.
+ * Any number that is not listed in this result, will be the possible values.
+ *
+ * @param {array} sudokuNumbers of the current sudoku
+ * @param {number} rowIndex the row index of the selected cell
+ * @param {number} columnIndex the column index of the selected cell
+ *
+ * @returns {array} a list of all possible values for the selected cell
  */
-exports.allPossibleValues = function (sudokuNumbers, rowIndex, columnIndex) {
+exports.possibleValuesForCell = function (sudokuNumbers, rowIndex, columnIndex) {
 
     var c,
         existingNumbersInRow,
         existingNumbersInColumn,
+        existingNumbersInQuadrant,
+        q,
         r,
         result,
         max = this.getAmountOfNumbers(sudokuNumbers);
@@ -50,8 +55,12 @@ exports.allPossibleValues = function (sudokuNumbers, rowIndex, columnIndex) {
     existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, columnIndex);
     c = this.possibleValues(existingNumbersInColumn, max);
 
+    existingNumbersInQuadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, 1, 1);
+    q = this.possibleValues(existingNumbersInQuadrant, max);
+
     // Only numbers that are possible within the row and column
     result = utilities.intersect(r, c);
+    result = utilities.intersect(result, q);
 
     return result;
 };
