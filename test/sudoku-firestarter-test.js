@@ -39,6 +39,22 @@ describe('SudokuFirestarter', function () {
         });
     });
 
+    describe('#getNextBestSolution()', function() {
+        it('Returns the value to be filled in next', function() {
+           expect(sudokuFireStarter.getNextSolution(testData.easy().input)).to.be.deep.equal([
+               [0, 0, 5, 0, 0, 0, 1, 7, 9],
+               [8, 0, 1, 7, 0, 0, 5, 0, 4],
+               [9, 4, 0, 1, 0, 0, 3, 0, 0],
+               [6, 2, 0, 0, 0, 0, 0, 9, 0],
+               [0, 0, 0, 2, 0, 4, 0, 0, 0],
+               [0, 5, 0, 0, 0, 0, 0, 2, 6],
+               [0, 0, 2, 0, 0, 1, 0, 3, 8],
+               [4, 0, 6, 0, 0, 3, 2, 0, 7],
+               [1, 7, 3, 0, 0, 0, 0, 0, 0]
+           ])
+        });
+    });
+
     describe('#getExistingNumbersInRow()', function () {
         it('Returns the number that exists in 2nd row', function () {
             expect(sudokuFireStarter.getExistingNumbersInRow(testData.easy().input, 1)).to.deep.equal([8, 1, 7, 5, 4]);
