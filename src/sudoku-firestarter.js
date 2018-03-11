@@ -10,7 +10,7 @@ var utilities = require('./sudoku-utilities'),
 exports.solveSudoku = function (sudokuNumbers) {
     var maxTries = 0,
         maxTriesLimit = 10,
-        solution,
+        solution = [],
         restart = false,
         max = this.getAmountOfNumbers(sudokuNumbers);
 
@@ -42,7 +42,7 @@ exports.solveSudoku = function (sudokuNumbers) {
         }
     }
 
-    return solution.sudoku;
+    return solution;
 };
 
 /**
