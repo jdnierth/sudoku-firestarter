@@ -6,19 +6,23 @@ var expect = require('chai').expect,
 describe('SudokuFirestarter', function () {
     describe('#solveSudoku()', function () {
         it('Sudoku data to be invalid', function () {
-            expect(sudokuFireStarter.checkResult(testData.superHard())).to.be.false;
+            expect(sudokuFireStarter.checkResult(testData.superHard().input)).to.be.false;
         });
 
         it('Sudoku result data to be valid', function () {
-            expect(sudokuFireStarter.checkResult(testData.superHardSolved())).to.be.true;
+            expect(sudokuFireStarter.checkResult(testData.superHard().output)).to.be.true;
         });
 
         it('Detects zero and duplicates', function () {
             expect(sudokuFireStarter.eachNumberExistsOnce([0, 2, 2])).to.be.false;
         });
 
-        it('Solve Sudoku', function () {
-              expect(sudokuFireStarter.solveSudoku(testData.easy().input)).to.be.deep.equal(testData.easy().output);
+        it('Solve easy Sudoku', function () {
+            expect(sudokuFireStarter.solveSudoku(testData.easy().input)).to.be.deep.equal(testData.easy().output);
+        });
+
+        it('Solve superhard Sudoku', function () {
+            expect(sudokuFireStarter.solveSudoku(testData.superHard().input)).to.be.deep.equal(testData.superHard().output);
         });
 
     });
