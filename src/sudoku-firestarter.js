@@ -24,6 +24,33 @@ exports.solveSudoku = function (sudokuNumbers) {
 };
 
 /**
+ * Given an unsolved sudoku, this function returns the next solution of an empty cell.
+ *
+ * @param {array} sudokuNumbers
+ */
+exports.getNextSolution = function (sudokuNumbers) {
+    var possibleValues,
+        newSudoku;
+
+    // Go through sudoku row by row.
+    for (var r = 0, rlen = sudokuNumbers.length; r < rlen; r++) {
+        for (var c = 0, clen = sudokuNumbers.length; c < clen; c++) {
+            if (sudokuNumbers[r][c] === 0) {
+                possibleValues = this.possibleValuesForCell(sudokuNumbers, r, c);
+
+                if (possibleValues.length === 1) {
+                    newSudoku = sudokuNumbers;
+                    // update new value
+                    newSudoku[r][c] = possibleValues[0];
+
+                    return newSudoku;
+                }
+            }
+        }
+    }
+};
+
+/**
  * Returns a list of values that will be possible to put into 1 requested cell.
  * It needs to check the available numbers in the row, in the column and the quadrant.
  * Any number that is not listed in this result, will be the possible values.
