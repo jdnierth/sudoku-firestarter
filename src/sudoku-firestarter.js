@@ -2,25 +2,122 @@ var utilities = require('./sudoku-utilities'),
     solvedSudoku;
 
 /**
- * Fills in the blanks for a given unsolved Sudoku.
+ * Given an unsolved sudoku game this function will return the solved sudoku.
  *
- * @param sudokuNumbers
- * @returns {boolean}
+ * @param {array} sudokuNumbers an array of arrays representing the sudoku game. Cells that need to be filled out are marked with the number 0.
+ *
+ * @returns {array} Returns an empty array if the sudoku couldn't be solved or an array of arrays with numbers representing the solved sudoku game.
  */
 exports.solveSudoku = function (sudokuNumbers) {
+    var maxTries = 0,
+        maxTriesLimit = 10,
+        solution = [],
+        restart = false,
+        max = this.getAmountOfNumbers(sudokuNumbers);
 
-    var quadrant,
-        length = sudokuNumbers.length;
+    for (var i = 0; i < max; i++) {
 
-    // Go through sudoku row by row.
-    for (var r = 0; r < length; r++) {
-
-        for (var c = 0; c <= length; c++) {
-            quadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, r, c);
+        // If the last solutions indexes haven't reached number of possible values
+        if (solution && (solution.r === max && solution.c === max)) {
+            return solution;
         }
 
+        if (i === 0 && !restart) {
+            solution = this.getNextSolution(sudokuNumbers, 0, 0);
+        } else if( i !== 0 && restart) {
+            solution = this.getNextSolution(solution.sudoku, solution.r, solution.c);
+        }
+
+        // Loop through the sudoku again if there are still zeros left
+        if(i === max - 1 && maxTries < maxTriesLimit) {
+            var zeros = this.checkSudokuForZeros(solution.sudoku, 0, 0);
+            if(Object.keys(zeros).length !== 0) {
+               i = 0;
+               restart = true;
+               solution.r = zeros.r;
+               solution.c = zeros.c;
+               maxTries++;
+            } else {
+                return solution.sudoku;
+            }
+        }
     }
 
+    return solution;
+};
+
+/**
+ * Loops through the sudoku game and returns an empty array if no zeros can be found, else returns an object with the row and column coordinates in which cell the next zero was found.
+ *
+ * @param {array} sudokuNumbers an array of arrays representing the sudoku game. Cells that need to be filled out are marked with the number 0.
+ * @param {number} r row index if set to null, loop will start from 0.
+ * @param {number} c column index if set to null, loop will start from 0.
+ *
+ * @return {object} containing the coordinates of the nearest cell in relation to the given r and c parameter that has the number 0 or an empty object if no 0's were found in the whole game.
+ */
+exports.checkSudokuForZeros = function (sudokuNumbers, r, c) {
+    var max = this.getAmountOfNumbers(sudokuNumbers);
+
+    r = (r == null) ? 0 : r;
+    c = (c == null) ? 0 : c;
+
+    // Go through sudoku row by row.
+    for (var rlen = sudokuNumbers.length; r < rlen; r++) {
+        c = 0;
+
+        for (var clen = sudokuNumbers.length; c < clen; c++) {
+            if (sudokuNumbers[r][c] === 0) {
+                return {
+                    r: r,
+                    c: c
+                }
+            }
+        }
+    }
+
+    return {};
+};
+
+/**
+ * Given an unsolved sudoku, this function returns the next solution of an empty cell.
+ *
+ * @param {array} sudokuNumbers
+ *
+ * @param {number} r row index from where to continue searching
+ * @param {number} c column index from where to continue searching
+ *
+ * @return {object} either returns the provided data (row, column and sudoku game numbers) or the number that needs to be put in a specific cell that had a 0 in it.
+ */
+exports.getNextSolution = function (sudokuNumbers, r, c) {
+    var possibleValues,
+        solution = {
+            r: r,
+            c: c,
+            sudoku: sudokuNumbers
+        };
+
+    // // Go through sudoku row by row.
+    for (var rlen = sudokuNumbers.length; r < rlen; r++) {
+        c = 0;
+        for (var clen = sudokuNumbers.length; c < clen; c++) {
+
+            if (sudokuNumbers[r][c] === 0) {
+                possibleValues = this.possibleValuesForCell(sudokuNumbers, r, c);
+                if (possibleValues.length === 1) {
+                    solution.sudoku = sudokuNumbers;
+
+                    // update new values
+                    solution.r = r;
+                    solution.c = c;
+                    solution.sudoku[r][c] = possibleValues[0];
+
+                    return solution;
+                }
+            }
+        }
+    }
+
+    return solution;
 };
 
 /**
@@ -55,7 +152,7 @@ exports.possibleValuesForCell = function (sudokuNumbers, rowIndex, columnIndex) 
     existingNumbersInColumn = this.getExistingNumbersInColumn(sudokuNumbers, columnIndex);
     c = this.possibleValues(existingNumbersInColumn, max);
 
-    existingNumbersInQuadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, 1, 1);
+    existingNumbersInQuadrant = this.getExistingNumbersInQuadrant(sudokuNumbers, rowIndex, columnIndex);
     q = this.possibleValues(existingNumbersInQuadrant, max);
 
     // Only numbers that are possible within the row and column
@@ -65,6 +162,14 @@ exports.possibleValuesForCell = function (sudokuNumbers, rowIndex, columnIndex) 
     return result;
 };
 
+/**
+ * Returns an array of numbers (or an array with a single number) that are considered to be valid solutions.
+ *
+ * @param {array} rowOrColumn array of numbers which either represent one single row or one single column of the sudoku. Any number that can not be found in this area will be considered potential solutions.
+ * @param {number} max basically the size of the sudoku.
+ *
+ * @returns {Array}
+ */
 exports.possibleValues = function (rowOrColumn, max) {
 
     var result = [];
